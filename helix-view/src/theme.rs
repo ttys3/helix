@@ -20,6 +20,10 @@ pub static BASE16_DEFAULT_THEME: Lazy<Theme> = Lazy::new(|| {
         .expect("Failed to parse base 16 default theme")
 });
 
+pub static DEFAULT_STATUS_LINE: Lazy<&str> = Lazy::new(|| {
+    include_str!("../../status.lua")
+});
+
 pub static DEFAULT_FT_ICON: Lazy<String> = Lazy::new(|| "".to_owned());
 
 // #[derive(Clone, Debug)]
