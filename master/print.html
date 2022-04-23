@@ -611,7 +611,7 @@ you to selectively add search terms to your selections.</p>
 <tr><td><code>:new</code>, <code>:n</code></td><td>Create a new scratch buffer.</td></tr>
 <tr><td><code>:format</code>, <code>:fmt</code></td><td>Format the file using the LSP formatter.</td></tr>
 <tr><td><code>:indent-style</code></td><td>Set the indentation style for editing. ('t' for tabs or 1-8 for number of spaces.)</td></tr>
-<tr><td><code>:line-ending</code></td><td>Set the document's default line ending. Options: crlf, lf, cr, ff, nel.</td></tr>
+<tr><td><code>:line-ending</code></td><td>Set the document's default line ending. Options: crlf, lf.</td></tr>
 <tr><td><code>:earlier</code>, <code>:ear</code></td><td>Jump back to an earlier point in edit history. Accepts a number of steps or a time span.</td></tr>
 <tr><td><code>:later</code>, <code>:lat</code></td><td>Jump to a later point in edit history. Accepts a number of steps or a time span.</td></tr>
 <tr><td><code>:write-quit</code>, <code>:wq</code>, <code>:x</code></td><td>Write changes to disk and close the current view. Accepts an optional path (:wq some/path.txt)</td></tr>
@@ -716,6 +716,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>mint</td><td></td><td></td><td></td><td><code>mint</code></td></tr>
 <tr><td>nickel</td><td>✓</td><td></td><td>✓</td><td><code>nls</code></td></tr>
 <tr><td>nix</td><td>✓</td><td></td><td>✓</td><td><code>rnix-lsp</code></td></tr>
+<tr><td>nu</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>ocaml</td><td>✓</td><td></td><td>✓</td><td><code>ocamllsp</code></td></tr>
 <tr><td>ocaml-interface</td><td>✓</td><td></td><td></td><td><code>ocamllsp</code></td></tr>
 <tr><td>org</td><td>✓</td><td></td><td></td><td></td></tr>
@@ -745,7 +746,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>typescript</td><td>✓</td><td></td><td>✓</td><td><code>typescript-language-server</code></td></tr>
 <tr><td>vue</td><td>✓</td><td></td><td></td><td><code>vls</code></td></tr>
 <tr><td>wgsl</td><td>✓</td><td></td><td></td><td></td></tr>
-<tr><td>yaml</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>yaml</td><td>✓</td><td></td><td>✓</td><td><code>yaml-language-server</code></td></tr>
 <tr><td>zig</td><td>✓</td><td></td><td>✓</td><td><code>zls</code></td></tr>
 </tbody></table>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="migrating-from-vim"><a class="header" href="#migrating-from-vim">Migrating from Vim</a></h1>
@@ -1168,6 +1169,7 @@ over it and is merged into the default palette.</p>
 <tr><td><code>ui.text</code></td><td>Command prompts, popup text, etc.</td></tr>
 <tr><td><code>ui.text.focus</code></td><td></td></tr>
 <tr><td><code>ui.text.info</code></td><td>The key: command text in <code>ui.popup.info</code> boxes</td></tr>
+<tr><td><code>ui.virtual.ruler</code></td><td>Ruler columns (see the <a href="./configuration.html#editor-section"><code>editor.rulers</code> config</a>)</td></tr>
 <tr><td><code>ui.virtual.whitespace</code></td><td>Visible white-space characters</td></tr>
 <tr><td><code>ui.menu</code></td><td>Code and command completion menus</td></tr>
 <tr><td><code>ui.menu.selected</code></td><td>Selected autocomplete item</td></tr>
