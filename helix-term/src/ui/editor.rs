@@ -45,6 +45,12 @@ pub enum InsertEvent {
     TriggerCompletion,
 }
 
+use once_cell::sync::Lazy;
+
+pub static DEFAULT_STATUS_LINE: Lazy<&str> = Lazy::new(|| {
+    include_str!("../../../status.lua")
+});
+
 impl Default for EditorView {
     fn default() -> Self {
         Self::new(Keymaps::default())
@@ -770,6 +776,28 @@ impl EditorView {
                 lsp_name
             )
         };
+
+
+        let lua = Lua::new();
+
+        lua.context(|lua_ctx| {
+            // You can get and set global variables.  Notice that the globals table here is a permanent
+            // reference to _G, and it is mutated behind the scenes as Lua code is loaded.  This API is
+            // based heavily around sharing and internal mutation (just like Lua itself).
+
+            let globals = lua_ctx.globals();
+
+            lua_ctx.load(DEFAULT_STATUSDEFAULT_STATUS_LINE.clone()) .set_name("statue_line")?
+                .exec()?;
+
+            globals.set("string_var", "world")?;
+            globals.set("int_var", 42)?;
+
+            let hello: Function = globals.get("status_line")?;
+            hello.call::<_, ()>("hello from rust")?;
+
+            Ok(())
+        })?;
 
         surface.set_string_truncated(
             viewport.x + 8, // 8: 1 space + 3 char mode string + 1 space + 1 spinner + 1 space
