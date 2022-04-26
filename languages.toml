@@ -1248,4 +1248,4 @@ language-server = { command = "vala-language-server" }
 
 [[grammar]]
 name = "vala"
-source = { git = "https://github.com/vala-lang/tree-sitter-vala", rev = "c9eea93ba2ec4ec1485392db11945819779745b3" }
+source = { git = "https://github.com/matbme/tree-sitter-vala", rev = "31a08784cc74b61cb10c5d8314cf8a8aa98aa9a8" }

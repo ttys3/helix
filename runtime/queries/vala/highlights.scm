@@ -1,218 +1,297 @@
-; highlights.scm
+; Identifiers
 
-; highlight constants
-(
-  (member_access_expression (identifier) @constant)
-  (#match? @constant "^[A-Z][A-Z_0-9]*$")
-)
+((identifier) @constant (#match? @constant "^[A-Z][A-Z\\d_]+$"))
 
-(
-  (member_access_expression (member_access_expression) @namespace (identifier) @constant)
-  (#match? @constant "^[A-Z][A-Z_0-9]*$")
-)
+(namespaced_identifier
+  left: [
+          ; Lowercased names in lhs typically are variables, while camel cased are namespaces
+          ((identifier) @namespace (#match? @namespace "^[A-Z]+[a-z]+$"))
+          ((identifier) @variable (#match? @variable "^[a-z]"))
+          (_)
+          ]
+  right: [
+           ; Lowercased are variables, camel cased are types
+           ((identifier) @parameter (#match? @parameter "^[a-z]"))
+           ((identifier) @type (#match? @type "^[A-Z]+[a-z]+$"))
+           (_)
+           ]
+  )
 
-(comment) @comment
+((identifier) @constructor (#match? @constructor "^[A-Z]*[a-z]+"))
 
-(type (symbol (_)? @namespace (identifier) @type))
+; Pointers
 
-; highlight creation methods in object creation expressions
-(
-  (object_creation_expression (type (symbol (symbol (symbol)? @namespace (identifier) @type) (identifier) @constructor)))
-  (#match? @constructor "^[a-z][a-z_0-9]*$")
-)
+(address_of_identifier "&" @string.special.symbol)
+(pointer_type "*" @string.special.symbol)
+(indirection_identifier "*" @string.special.symbol)
 
-(unqualified_type (symbol . (identifier) @type))
-(unqualified_type (symbol (symbol) @namespace (identifier) @type))
+; Misc
 
-(attribute) @variable.other.member
-(method_declaration (symbol (symbol) @type (identifier) @function))
-(method_declaration (symbol (identifier) @function))
-(local_function_declaration (identifier) @function)
-(destructor_declaration (identifier) @function)
-(creation_method_declaration (symbol (symbol (identifier) @type) (identifier) @constructor))
-(creation_method_declaration (symbol (identifier) @constructor))
-(enum_declaration (symbol) @type)
-(enum_value (identifier) @constant)
-(errordomain_declaration (symbol) @type)
-(errorcode (identifier) @constant)
-(constant_declaration (identifier) @constant)
-(method_call_expression (member_access_expression (identifier) @function))
-(lambda_expression (identifier) @variable.parameter)
-(parameter (identifier) @variable.parameter)
-(property_declaration (symbol (identifier) @variable.other.member))
-(field_declaration (identifier) @variable)
-(identifier) @variable
-[
- (this_access)
- (base_access)
- (value_access)
-] @variable.builtin
-(boolean) @constant.builtin.boolean
-(character) @constant.character
-(integer) @constant.numeric.integer
-(null) @constant.builtin
-(real) @constant.numeric.float
-(regex) @string.regexp
-(string) @string
-[
- (escape_sequence)
- (string_formatter)
-] @string.special
-(template_string) @string
-(template_string_expression) @string.special
-(verbatim_string) @string
-[
- "var"
- "void"
-] @type.builtin
+(number) @constant.numeric
 
 [
- "abstract"
- "async"
- "break"
- "case"
- "catch"
- "class"
- "const"
- "construct"
- "continue"
- "default"
- "delegate"
- "do"
- "dynamic"
- "else"
- "enum"
- "errordomain"
- "extern"
- "finally"
- "for"
- "foreach"
- "get"
- "if"
- "inline"
- "interface"
- "internal"
- "lock"
- "namespace"
- "new"
- "out"
- "override"
- "owned"
- "partial"
- "private"
- "protected"
- "public"
- "ref"
- "set"
- "signal"
- "static"
- "struct"
- "switch"
- "throw"
- "throws"
- "try"
- "unowned"
- "virtual"
- "weak"
- "while"
- "with"
-] @keyword
+  "{"
+  "}"
+  "("
+  ")"
+  "["
+  "]"
+  ] @punctuation.bracket
 
 [
-  "and"
-  "as"
-  "delete"
-  "in"
-  "is"
-  "not"
-  "or"
-  "sizeof"
-  "typeof"
-] @keyword.operator
+  ";"
+  ":"
+  "."
+  ","
+  "->"
+  ] @punctuation.delimiter
 
-"using" @namespace
-
-(symbol "global::" @namespace)
-
-(array_creation_expression "new" @keyword.operator)
-(object_creation_expression "new" @keyword.operator)
-(argument "out" @keyword.operator)
-(argument "ref" @keyword.operator)
-
-[
-  "continue"
-  "do"
-  "for"
-  "foreach"
-  "while"
-] @keyword.control.repeat
-
-[
-  "catch"
-  "finally"
-  "throw"
-  "throws"
-  "try"
-] @keyword.control.exception
+; Reserved keywords
 
 [
   "return"
   "yield"
-] @keyword.control.return
+  "break"
+  ] @keyword.control.return
+
+
+(null) @constant.builtin
 
 [
- "="
- "=="
- "+"
- "+="
- "-"
- "-="
- "++"
- "--"
- "|"
- "|="
- "&"
- "&="
- "^"
- "^="
- "/"
- "/="
- "*"
- "*="
- "%"
- "%="
- "<<"
- "<<="
- ">>"
- ">>="
- "."
- "?."
- "->"
- "!"
- "!="
- "~"
- "??"
- "?"
- ":"
- "<"
- "<="
- ">"
- ">="
- "||"
- "&&"
- "=>"
-] @operator
+  "typeof"
+  "is"
+  ] @keyword.operator
 
 [
- ","
- ";"
-] @punctuation.delimiter
+  (modifier)
+  "var"
+  "class"
+  "interface"
+  (property_parameter)
+  (this)
+  "enum"
+  "new"
+  "in"
+  "as"
+  "try"
+  "catch"
+  "requires"
+  "ensures"
+  "owned"
+  "throws"
+  "delete"
+  "#if"
+  "#elif"
+  (preproc_else)
+  (preproc_endif)
+  ] @keyword
+
+"throw" @keyword.control.exception
 
 [
- "("
- ")"
- "{"
- "}"
- "["
- "]"
-] @punctuation.bracket
+  "if"
+  "else"
+  "switch"
+  "case"
+  "default"
+  ] @keyword.control.conditional
+
+[
+  "for"
+  "foreach"
+  "while"
+  "do"
+  ] @keyword.control.repeat
+
+[
+  (true)
+  (false)
+  ] @constant.builtin.boolean
+
+; Operators
+
+(binary_expression
+  [
+    "*"
+    "/"
+    "+"
+    "-"
+    "%"
+    "<"
+    "<="
+    ">"
+    ">="
+    "=="
+    "!="
+    "+="
+    "-="
+    "*="
+    "/="
+    "%="
+    "&&"
+    "||"
+    "&"
+    "|"
+    "^"
+    "~"
+    "|="
+    "&="
+    "^="
+    "??"
+    "="
+    ] @operator
+  )
+
+(unary_expression
+  [
+    "-"
+    "!"
+    "--"
+    "++"
+    ] @operator
+  )
+
+; Declaration
+
+(declaration
+  type_name: (_) @type
+  )
+
+; Methods
+
+(function_definition
+  type: (_) @type
+  name: [
+          (identifier) @function.method
+          (generic_identifier (_) @type)
+          ]
+  )
+
+(function_call
+  identifier: [
+                (identifier) @function
+                (generic_identifier (_) @type)
+                ]
+  )
+
+(member_function
+  identifier: [
+                (identifier) @function
+                (generic_identifier (_) @type)
+                ]
+  )
+
+; Types
+
+(primitive_type) @type
+
+(nullable_type
+  (_) @type
+  "?" @string.special.symbol
+  )
+
+; Comments
+
+(comment) @comment
+
+; Namespace
+
+(namespace
+  "namespace" @keyword.control.import
+  (_) @namespace
+  )
+
+"global::" @namespace
+
+(using
+  "using" @keyword.control.import
+  (_) @namespace
+  )
+
+; Classes
+
+(class_declaration) @type
+
+(class_constructor_definition
+  name: [
+          (_)
+          (namespaced_identifier (_) @constructor .)
+          ] @constructor
+  )
+
+(class_destructor
+  "~" @string.special.symbol
+  (_) @constructor
+  )
+
+; Interfaces
+
+(interface_declaration) @type
+
+; Strings and escape sequences
+
+(string_literal) @string
+(verbatim) @string
+(escape_sequence) @string
+
+(string_template
+  "@" @string.special.symbol
+  ) @string
+
+(string_template_variable) @variable.other
+
+(string_template_expression) @variable.other
+
+; New instance from Object
+
+(new_instance
+  "new" @keyword
+  )
+
+; GObject construct
+
+(gobject_construct
+  "construct" @keyword
+  )
+
+; Try statement
+
+(try_statement
+  exception: (parameter_list (declaration_parameter
+                               (_) @keyword.control.exception
+                               (_) @variable.parameter
+                               ))
+  )
+
+; Enum
+
+(enum_declaration
+  name: (identifier) @type
+  )
+
+; Loop
+
+(foreach_statement
+  loop_item: (identifier) @variable
+  )
+
+; Casting
+
+(static_cast
+  type: (_) @type
+  )
+
+(dynamic_cast
+  type: (_) @type
+  )
+
+; Regex
+
+(regex_literal) @string.regexp
+
+; Code attribute
+
+(code_attribute
+  name: (identifier) @variable.other.member
+  param: (_) @variable.other.member
+  ) @variable.other.member
